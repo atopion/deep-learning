@@ -395,3 +395,54 @@ def plot(title, label, train_results, val_results, yscale='linear', save_path=No
     if save_path:
         plt.savefig(str(save_path), bbox_inches='tight')
     plt.show()
+
+
+# Helper function to find and print the best training results
+def printBestValues(val_accs, val_losses):
+    # Find overall best value: val_loss (lower is better)
+    best_loss_value = 10e8
+    best_loss_epoch = 0
+    for idx in range(len(val_losses)):
+      if val_losses[idx] < best_loss_value:
+        best_loss_value = val_losses[idx]
+        best_loss_epoch = idx
+
+    # Find overall best value: val_acc (higher is better)
+    best_acc_value = 0
+    best_acc_epoch = 0
+    for idx in range(len(val_accs)):
+      if val_accs[idx] > best_acc_value:
+        best_acc_value = val_accs[idx]
+        best_acc_epoch = idx
+    
+    print("Lowest  validation loss:     {} (in epoch {})".format(best_loss_value, best_loss_epoch))
+    print("Highest validation accuracy: {} (in epoch {})".format(best_acc_value, best_acc_epoch))
+
+    # Return the epochs with the best values
+    return best_loss_epoch, best_acc_epoch
+
+
+# Helper function that does the training, based on parameters
+def doTraining(model, title, trainloader, valloader, device, epochs = 100, lr = 0.001, early_stopper = None, loss_function = nn.CrossEntropyLoss(), optimizer = optim.Adam):
+  
+    # Move the model to the device
+    model.to(device)
+
+    # Setup the optimizer
+    params = list(model.parameters())
+    optimizer = optimizer(params, lr)
+
+    printmd("###**" + title + "**")
+
+    # Train the model
+    train_losses, val_losses, train_accs, val_accs, _ = run_training(model, optimizer, loss_function, device, epochs, trainloader, valloader, early_stopper=early_stopper)
+
+    # Find and print out the best results
+    best_loss_epoch, best_acc_epoch = printBestValues(val_accs, val_losses)
+
+    plot("Loss vs epoch", "Loss", train_losses, val_losses, extra_pt = (best_loss_epoch, val_losses[best_loss_epoch]), extra_pt_label = "Epoch with lowest validation loss")
+    plot("Accuracy vs epoch", "Accuracy", train_accs, val_accs, extra_pt = (best_acc_epoch, val_accs[best_acc_epoch]), extra_pt_label = "Epoch with highest validation accuracy")
+    print("================================================================\n\n")
+
+    # Return the trained model
+    return model
