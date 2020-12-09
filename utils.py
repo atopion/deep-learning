@@ -443,6 +443,3 @@ def doTraining(model, title, trainloader, valloader, device, epochs = 100, lr = 
     plot("Loss vs epoch", "Loss", train_losses, val_losses, extra_pt = (best_loss_epoch, val_losses[best_loss_epoch]), extra_pt_label = "Epoch with lowest validation loss")
     plot("Accuracy vs epoch", "Accuracy", train_accs, val_accs, extra_pt = (best_acc_epoch, val_accs[best_acc_epoch]), extra_pt_label = "Epoch with highest validation accuracy")
     print("================================================================\n\n")
-
-    # Return the trained model
-    return model
