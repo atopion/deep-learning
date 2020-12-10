@@ -488,7 +488,7 @@ def printBestValues(val_accs, val_losses):
 
 
 # Helper function that does the training, based on parameters
-def doTraining(model, title, trainloader, valloader, device, epochs = 100, lr = 0.001, early_stopper = None, loss_function = nn.CrossEntropyLoss(), optimizer = optim.Adam, use_lr_scheduling = False, lr_step_size = 30, lr_gamma = 0.1):
+def doTraining(model, title, trainloader, valloader, device, epochs = 100, lr = 0.001, early_stopper = None, loss_function = nn.CrossEntropyLoss(), optimizer = optim.Adam, lr_scheduler = None, lr_step_size = 30, lr_gamma = 0.1):
   
     # Move the model to the device
     model.to(device)
@@ -499,8 +499,8 @@ def doTraining(model, title, trainloader, valloader, device, epochs = 100, lr = 
 
     printmd("###**" + title + "**")
 
-    if use_lr_scheduling:
-       # Train the model without LR Scheduling
+    if lr_scheduler is not None:
+       # Train the model with LR Scheduling
         train_losses, val_losses, train_accs, val_accs, _ = run_training_with_lr_scheduling(model, optimizer, loss_function, device, epochs, trainloader, valloader, early_stopper=early_stopper, step_size=lr_step_size, gamma=lr_gamma)
     else:
         # Train the model without LR Scheduling
