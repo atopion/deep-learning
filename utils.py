@@ -511,7 +511,7 @@ def plot(title, label, train_results, val_results, yscale='linear', save_path=No
         ####################
         ## YOUR CODE HERE ##
         ####################
-        plt.scatter(extra_pt[0], extra_pt[1], c='black')
+        plt.scatter(extra_pt[0]+1, extra_pt[1], c='black', zorder=9999)
 
         # END OF YOUR CODE #
         
