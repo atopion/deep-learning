@@ -546,8 +546,8 @@ def printBestValues(val_accs, val_losses):
         best_acc_value = val_accs[idx]
         best_acc_epoch = idx
     
-    print("Lowest  validation loss:     {} (in epoch {})".format(best_loss_value, best_loss_epoch))
-    print("Highest validation accuracy: {} (in epoch {})".format(best_acc_value, best_acc_epoch))
+    print("Lowest  validation loss:     {} (in epoch {})".format(best_loss_value, best_loss_epoch +1))
+    print("Highest validation accuracy: {} (in epoch {})".format(best_acc_value, best_acc_epoch +1))
 
     # Return the epochs with the best values
     return best_loss_epoch, best_acc_epoch
